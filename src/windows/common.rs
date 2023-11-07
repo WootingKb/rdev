@@ -92,13 +92,13 @@ pub unsafe fn convert(param: WPARAM, lpdata: LPARAM) -> Option<EventType> {
             let delta = get_delta(lpdata);
             Some(EventType::Wheel {
                 delta_x: 0,
-                delta_y: (delta / hiword(WHEEL_DELTA)) as i64,
+                delta_y: (delta.checked_div(hiword(WHEEL_DELTA)).unwrap_or_default()) as i64,
             })
         }
         Ok(WM_MOUSEHWHEEL) => {
             let delta = get_delta(lpdata);
             Some(EventType::Wheel {
-                delta_x: (delta / hiword(WHEEL_DELTA)) as i64,
+                delta_x: (delta.checked_div(hiword(WHEEL_DELTA)).unwrap_or_default()) as i64,
                 delta_y: 0,
             })
         }
