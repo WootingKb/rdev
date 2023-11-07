@@ -22,6 +22,6 @@ pub type WORD = u16;
 #[allow(clippy::upper_case_acronyms)]
 pub type LONG = i32;
 #[allow(clippy::upper_case_acronyms)]
-pub static MOUSE_FORWARD: u8 = 0x05;
+pub static MOUSE_FORWARD: u8 = 0x01;
 #[allow(clippy::upper_case_acronyms)]
-pub static MOUSE_BACKWARD: u8 = 0x06;
+pub static MOUSE_BACKWARD: u8 = 0x02;
