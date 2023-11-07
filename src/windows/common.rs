@@ -7,7 +7,7 @@ use std::convert::TryInto;
 use std::os::raw::c_int;
 use std::sync::Mutex;
 use windows_sys::Win32::Foundation::{GetLastError, WPARAM};
-use windows_sys::Win32::Foundation::{HINSTANCE, LPARAM, LRESULT};
+use windows_sys::Win32::Foundation::{HLOCAL, LPARAM, LRESULT};
 use windows_sys::Win32::UI::WindowsAndMessaging::HHOOK;
 use windows_sys::Win32::UI::WindowsAndMessaging::{
     SetWindowsHookExA, KBDLLHOOKSTRUCT, MSLLHOOKSTRUCT, WHEEL_DELTA, WH_KEYBOARD_LL, WH_MOUSE_LL,
@@ -113,7 +113,7 @@ pub enum HookError {
 }
 
 pub unsafe fn set_key_hook(callback: RawCallback) -> Result<(), HookError> {
-    let hmod: HINSTANCE = 0;
+    let hmod: HLOCAL = 0;
     let hook = SetWindowsHookExA(WH_KEYBOARD_LL, Some(callback), hmod, 0);
 
     if hook == 0 {
@@ -125,7 +125,7 @@ pub unsafe fn set_key_hook(callback: RawCallback) -> Result<(), HookError> {
 }
 
 pub unsafe fn set_mouse_hook(callback: RawCallback) -> Result<(), HookError> {
-    let hmod: HINSTANCE = 0;
+    let hmod: HLOCAL = 0;
     let hook = SetWindowsHookExA(WH_MOUSE_LL, Some(callback), hmod, 0);
     if hook == 0 {
         let error = GetLastError();
