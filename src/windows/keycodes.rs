@@ -1,15 +1,14 @@
 use crate::rdev::Key;
+use crate::windows::WORD;
 use std::convert::TryInto;
-use winapi::shared::minwindef::WORD;
-use winapi::um::winuser::{MapVirtualKeyA, MAPVK_VK_TO_VSC};
+use windows_sys::Win32::UI::Input::KeyboardAndMouse::{MapVirtualKeyA, MAPVK_VK_TO_VSC};
 
 pub fn scan_from_code(code: WORD) -> Option<WORD> {
     let scan = unsafe { MapVirtualKeyA(code as u32, MAPVK_VK_TO_VSC) } as WORD;
 
     if scan != 0 {
         Some(scan)
-    }
-    else {
+    } else {
         None
     }
 }
