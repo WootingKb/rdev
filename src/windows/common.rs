@@ -83,7 +83,11 @@ pub unsafe fn convert(param: WPARAM, lpdata: LPARAM) -> Option<EventType> {
         }
         Ok(WM_XBUTTONUP) => {
             let code = get_button_code(lpdata) as u8;
-            Some(EventType::ButtonRelease(Button::Unknown(code)))
+            match code {
+                num if num == MOUSE_FORWARD => Some(EventType::ButtonRelease(Button::Forward)),
+                num if num == MOUSE_BACKWARD => Some(EventType::ButtonRelease(Button::Backward)),
+                num => Some(EventType::ButtonRelease(Button::Unknown(num))),
+            }
         }
         Ok(WM_MOUSEMOVE) => {
             let (x, y) = get_point(lpdata);
