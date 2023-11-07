@@ -220,6 +220,8 @@ pub enum Button {
     Left,
     Right,
     Middle,
+    Forward,
+    Backward,
     Unknown(u8),
 }
 

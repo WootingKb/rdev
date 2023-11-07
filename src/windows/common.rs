@@ -1,7 +1,7 @@
 use crate::rdev::{Button, EventType};
 use crate::windows::keyboard::Keyboard;
 use crate::windows::keycodes::key_from_code;
-use crate::windows::{DWORD, LONG, WORD};
+use crate::windows::{DWORD, LONG, MOUSE_BACKWARD, MOUSE_FORWARD, WORD};
 use lazy_static::lazy_static;
 use std::convert::TryInto;
 use std::os::raw::c_int;
@@ -75,11 +75,19 @@ pub unsafe fn convert(param: WPARAM, lpdata: LPARAM) -> Option<EventType> {
         Ok(WM_RBUTTONUP) => Some(EventType::ButtonRelease(Button::Right)),
         Ok(WM_XBUTTONDOWN) => {
             let code = get_button_code(lpdata) as u8;
-            Some(EventType::ButtonPress(Button::Unknown(code)))
+            match code {
+                num if num == MOUSE_FORWARD => Some(EventType::ButtonPress(Button::Forward)),
+                num if num == MOUSE_BACKWARD => Some(EventType::ButtonPress(Button::Backward)),
+                num => Some(EventType::ButtonPress(Button::Unknown(num))),
+            }
         }
         Ok(WM_XBUTTONUP) => {
             let code = get_button_code(lpdata) as u8;
-            Some(EventType::ButtonRelease(Button::Unknown(code)))
+            match code {
+                num if num == MOUSE_FORWARD => Some(EventType::ButtonRelease(Button::Forward)),
+                num if num == MOUSE_BACKWARD => Some(EventType::ButtonRelease(Button::Backward)),
+                num => Some(EventType::ButtonRelease(Button::Unknown(num))),
+            }
         }
         Ok(WM_MOUSEMOVE) => {
             let (x, y) = get_point(lpdata);

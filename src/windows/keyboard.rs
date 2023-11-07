@@ -17,7 +17,9 @@ const VK_LSHIFT_: usize = VK_LSHIFT as usize;
 const VK_RSHIFT_: usize = VK_RSHIFT as usize;
 const HIGHBIT: u8 = 0x80;
 
+#[allow(clippy::upper_case_acronyms)]
 pub type UINT = u32;
+#[allow(clippy::upper_case_acronyms)]
 pub type BYTE = u8;
 
 pub struct Keyboard {
