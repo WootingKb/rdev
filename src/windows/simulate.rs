@@ -1,7 +1,7 @@
 use crate::rdev::{Button, EventType, SimulateError};
 use crate::windows::keyboard::UINT;
 use crate::windows::keycodes::{code_from_key, scan_from_code};
-use crate::windows::{DWORD, LONG, WORD};
+use crate::windows::{DWORD, LONG, MOUSE_BACKWARD, MOUSE_FORWARD, WORD};
 use std::convert::TryFrom;
 use std::ffi::c_int;
 use std::mem::size_of;
@@ -91,12 +91,16 @@ pub fn simulate(event_type: &EventType) -> Result<(), SimulateError> {
             Button::Left => sim_mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0),
             Button::Middle => sim_mouse_event(MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0),
             Button::Right => sim_mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0),
+            Button::Forward => sim_mouse_event(MOUSEEVENTF_XDOWN, MOUSE_FORWARD.into(), 0, 0),
+            Button::Backward => sim_mouse_event(MOUSEEVENTF_XDOWN, MOUSE_BACKWARD.into(), 0, 0),
             Button::Unknown(code) => sim_mouse_event(MOUSEEVENTF_XDOWN, (*code).into(), 0, 0),
         },
         EventType::ButtonRelease(button) => match button {
             Button::Left => sim_mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0),
             Button::Middle => sim_mouse_event(MOUSEEVENTF_MIDDLEUP, 0, 0, 0),
             Button::Right => sim_mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0),
+            Button::Forward => sim_mouse_event(MOUSEEVENTF_XUP, MOUSE_FORWARD.into(), 0, 0),
+            Button::Backward => sim_mouse_event(MOUSEEVENTF_XUP, MOUSE_BACKWARD.into(), 0, 0),
             Button::Unknown(code) => sim_mouse_event(MOUSEEVENTF_XUP, (*code).into(), 0, 0),
         },
         EventType::Wheel { delta_x, delta_y } => {
