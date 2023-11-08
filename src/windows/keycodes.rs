@@ -158,8 +158,7 @@ decl_keycodes! {
     Kp7, 103,
     Kp8, 104,
     Kp9, 105,
-    KpDelete, 110,
-    VolumeMute,
+    KpDelete, 110
 }
 
 #[cfg(test)]
