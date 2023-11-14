@@ -1,6 +1,6 @@
 [package]
 name = "rdev"
-version = "0.6.1"
+version = "0.6.2"
 authors = ["Nicolas Patry <patry.nicolas@protonmail.com>", "David M <david@wooting.io>"]
 edition = "2021"
 
@@ -30,9 +30,9 @@ core-foundation-sys = {version = "0.8" }
 
 [target.'cfg(target_os = "linux")'.dependencies]
 libc = "0.2"
-x11 = {version = "2.18", features = ["xlib", "xrecord", "xinput"]}
+x11 = {version = "2.21", features = ["xlib", "xrecord", "xinput"]}
 evdev-rs = {version = "0.6", optional=true}
-epoll = {version = "4.1", optional=true}
+epoll = {version = "4.3", optional=true}
 inotify = {version = "0.10", default-features=false, optional=true}
 
 [target.'cfg(target_os = "windows")'.dependencies]
