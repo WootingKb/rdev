@@ -3,8 +3,9 @@ name = "rdev"
 version = "0.6.3"
 authors = ["Nicolas Patry <patry.nicolas@protonmail.com>", "David M <david@wooting.io>"]
 edition = "2021"
+publish = false
 
-description = "Listen and send keyboard and mouse events on Windows, Linux and MacOS."
+description = "Listen and send keyboard and mouse events on Windows, Linux and MacOS. Modified version for Wooting."
 documentation = "https://docs.rs/rdev/"
 homepage = "https://github.com/Narsil/rdev"
 repository = "https://github.com/Narsil/rdev"
