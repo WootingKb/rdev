@@ -138,6 +138,10 @@ pub enum Key {
     VolumeMute,
     VolumeDown,
     VolumeUp,
+    NextTrack,
+    PrevTrack,
+    StopTrack,
+    PlayPauseTrack,
     Home,
     LeftArrow,
     /// also known as "windows", "super", and "command"
