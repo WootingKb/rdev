@@ -18,6 +18,7 @@ use windows_sys::Win32::UI::WindowsAndMessaging::{
 pub const TRUE: i32 = 1;
 pub const FALSE: i32 = 0;
 
+pub const KEYBOARDMANAGER_INJECTED_FLAG: usize = 0x1;
 #[inline]
 fn hiword(l: u32) -> u16 {
     ((l >> 16) & 0xffff) as u16

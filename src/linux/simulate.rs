@@ -21,8 +21,8 @@ unsafe fn send_native(event_type: &EventType, display: *mut xlib::Display) -> Op
             Button::Left => xtest::XTestFakeButtonEvent(display, 1, TRUE, 0),
             Button::Middle => xtest::XTestFakeButtonEvent(display, 2, TRUE, 0),
             Button::Right => xtest::XTestFakeButtonEvent(display, 3, TRUE, 0),
-            Button::Forward => xtest::XTestFakeButtonEvent(display, 4 , TRUE, 0),
-            Button::Backward => xtest::XTestFakeButtonEvent(display, 5 , TRUE, 0),
+            Button::Forward => xtest::XTestFakeButtonEvent(display, 4, TRUE, 0),
+            Button::Backward => xtest::XTestFakeButtonEvent(display, 5, TRUE, 0),
             Button::Unknown(code) => {
                 xtest::XTestFakeButtonEvent(display, (*code).try_into().ok()?, TRUE, 0)
             }
@@ -31,8 +31,8 @@ unsafe fn send_native(event_type: &EventType, display: *mut xlib::Display) -> Op
             Button::Left => xtest::XTestFakeButtonEvent(display, 1, FALSE, 0),
             Button::Middle => xtest::XTestFakeButtonEvent(display, 2, FALSE, 0),
             Button::Right => xtest::XTestFakeButtonEvent(display, 3, FALSE, 0),
-            Button::Forward => xtest::XTestFakeButtonEvent(display, 4 , FALSE, 0),
-            Button::Backward => xtest::XTestFakeButtonEvent(display, 5 , FALSE, 0),
+            Button::Forward => xtest::XTestFakeButtonEvent(display, 4, FALSE, 0),
+            Button::Backward => xtest::XTestFakeButtonEvent(display, 5, FALSE, 0),
             Button::Unknown(code) => {
                 xtest::XTestFakeButtonEvent(display, (*code).try_into().ok()?, FALSE, 0)
             }

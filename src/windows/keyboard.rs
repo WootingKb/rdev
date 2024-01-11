@@ -1,15 +1,17 @@
-use crate::rdev::{EventType, Key, KeyboardState};
-use crate::windows::common::{get_code, get_scan_code, FALSE, TRUE};
-use crate::windows::keycodes::code_from_key;
 use std::ptr::null_mut;
+
 use windows_sys::Win32::Foundation::LPARAM;
 use windows_sys::Win32::System::Threading::{AttachThreadInput, GetCurrentThreadId};
 use windows_sys::Win32::UI::Input::KeyboardAndMouse::{
-    GetKeyState, GetKeyboardLayout, GetKeyboardState, ToUnicodeEx, VK_CAPITAL, VK_LSHIFT,
+    GetKeyboardLayout, GetKeyboardState, GetKeyState, ToUnicodeEx, VK_CAPITAL, VK_LSHIFT,
     VK_RSHIFT, VK_SHIFT,
 };
 use windows_sys::Win32::UI::TextServices::HKL;
 use windows_sys::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowThreadProcessId};
+
+use crate::rdev::{EventType, Key, KeyboardState};
+use crate::windows::common::{FALSE, get_code, get_scan_code, TRUE};
+use crate::windows::keycodes::code_from_key;
 
 const VK_SHIFT_: usize = VK_SHIFT as usize;
 const VK_CAPITAL_: usize = VK_CAPITAL as usize;
