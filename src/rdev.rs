@@ -253,12 +253,20 @@ pub enum EventType {
     /// To the actual letter a user would use, that requires some layout logic to be added.
     KeyPress(Key),
     KeyRelease(Key),
+    SimulatedKeyPress(Key),
+    SimulatedKeyRelease(Key),
     /// Mouse Button
     ButtonPress(Button),
     ButtonRelease(Button),
+    SimulatedButtonPress(Button),
+    SimulatedButtonRelease(Button),
     /// Values in pixels. `EventType::MouseMove{x: 0, y: 0}` corresponds to the
     /// top left corner, with x increasing downward and y increasing rightward
     MouseMove {
+        x: f64,
+        y: f64,
+    },
+    SimulatedMouseMove {
         x: f64,
         y: f64,
     },
@@ -266,6 +274,10 @@ pub enum EventType {
     /// Positive values correspond to scrolling up or right and negative values
     /// correspond to scrolling down or left
     Wheel {
+        delta_x: i64,
+        delta_y: i64,
+    },
+    SimulatedWheel {
         delta_x: i64,
         delta_y: i64,
     },

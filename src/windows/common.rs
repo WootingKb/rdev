@@ -1,20 +1,24 @@
-use crate::rdev::{Button, EventType};
-use crate::windows::keyboard::Keyboard;
-use crate::windows::keycodes::key_from_code;
-use crate::windows::{DWORD, LONG, MOUSE_BACKWARD, MOUSE_FORWARD, WORD};
-use lazy_static::lazy_static;
 use std::convert::TryInto;
 use std::os::raw::c_int;
 use std::sync::Mutex;
+
+use lazy_static::lazy_static;
 use windows_sys::Win32::Foundation::{GetLastError, WPARAM};
 use windows_sys::Win32::Foundation::{HLOCAL, LPARAM, LRESULT};
-use windows_sys::Win32::UI::WindowsAndMessaging::HHOOK;
+use windows_sys::Win32::UI::Input::KeyboardAndMouse::KEYBDINPUT;
 use windows_sys::Win32::UI::WindowsAndMessaging::{
-    SetWindowsHookExA, KBDLLHOOKSTRUCT, MSLLHOOKSTRUCT, WHEEL_DELTA, WH_KEYBOARD_LL, WH_MOUSE_LL,
+    KBDLLHOOKSTRUCT, MSLLHOOKSTRUCT, SetWindowsHookExA, WH_KEYBOARD_LL, WH_MOUSE_LL, WHEEL_DELTA,
     WM_KEYDOWN, WM_KEYUP, WM_LBUTTONDOWN, WM_LBUTTONUP, WM_MBUTTONDOWN, WM_MBUTTONUP,
     WM_MOUSEHWHEEL, WM_MOUSEMOVE, WM_MOUSEWHEEL, WM_RBUTTONDOWN, WM_RBUTTONUP, WM_SYSKEYDOWN,
     WM_SYSKEYUP, WM_XBUTTONDOWN, WM_XBUTTONUP,
 };
+use windows_sys::Win32::UI::WindowsAndMessaging::HHOOK;
+
+use crate::rdev::{Button, EventType};
+use crate::windows::{DWORD, LONG, MOUSE_BACKWARD, MOUSE_FORWARD, WORD};
+use crate::windows::keyboard::Keyboard;
+use crate::windows::keycodes::key_from_code;
+
 pub const TRUE: i32 = 1;
 pub const FALSE: i32 = 0;
 
@@ -34,6 +38,38 @@ pub unsafe fn get_code(lpdata: LPARAM) -> DWORD {
     kb.vkCode
 }
 
+#[cfg(debug_assertions)]
+pub unsafe fn analyse_simulate(key_union: &mut KEYBDINPUT) {
+    println!("SIMULATION ANALYSIS");
+    println!("Event vkCode: {}", key_union.wVk);
+    println!("Event scanCode: {}", key_union.wScan);
+    println!("Event flags: {}", key_union.dwFlags);
+    println!("Event time: {}", key_union.time);
+    println!("Event simulated?: {}", key_union.dwExtraInfo);
+    println!("--------");
+}
+#[cfg(debug_assertions)]
+pub unsafe fn analyse_listen(lpdata: LPARAM) {
+    let kb = *(lpdata as *const KBDLLHOOKSTRUCT);
+    println!("LISTEN ANALYSIS");
+    println!("Event vkCode: {}", kb.vkCode);
+    println!("Event scanCode: {}", kb.scanCode);
+    println!("Event flags: {}", kb.flags);
+    println!("Event time: {}", kb.time);
+    println!("Event simulated?: {}", kb.dwExtraInfo);
+    println!("--------");
+}
+
+/// Returns whether the input received was made by the rdev simulate command, or the user pressing keys.
+pub unsafe fn get_simulated(lpdata: LPARAM) -> bool {
+    let kb = *(lpdata as *const KBDLLHOOKSTRUCT);
+
+    if kb.dwExtraInfo == KEYBOARDMANAGER_INJECTED_FLAG {
+        true
+    } else {
+        false
+    }
+}
 pub unsafe fn get_scan_code(lpdata: LPARAM) -> DWORD {
     let kb = *(lpdata as *const KBDLLHOOKSTRUCT);
     kb.scanCode
@@ -61,12 +97,28 @@ pub unsafe fn convert(param: WPARAM, lpdata: LPARAM) -> Option<EventType> {
         Ok(WM_KEYDOWN) | Ok(WM_SYSKEYDOWN) => {
             let code = get_code(lpdata);
             let key = key_from_code(code as u16);
-            Some(EventType::KeyPress(key))
+            let simulated = get_simulated(lpdata);
+
+            #[cfg(debug_assertions)]
+            println!("Simulated: {}", simulated);
+
+            match simulated {
+                true => Some(EventType::SimulatedKeyPress(key)),
+                false => Some(EventType::KeyPress(key)),
+            }
         }
         Ok(WM_KEYUP) | Ok(WM_SYSKEYUP) => {
             let code = get_code(lpdata);
             let key = key_from_code(code as u16);
-            Some(EventType::KeyRelease(key))
+            let simulated = get_simulated(lpdata);
+
+            #[cfg(debug_assertions)]
+            println!("Simulated: {}", simulated);
+
+            match simulated {
+                true => Some(EventType::SimulatedKeyRelease(key)),
+                false => Some(EventType::KeyRelease(key)),
+            }
         }
         Ok(WM_LBUTTONDOWN) => Some(EventType::ButtonPress(Button::Left)),
         Ok(WM_LBUTTONUP) => Some(EventType::ButtonRelease(Button::Left)),
@@ -76,6 +128,11 @@ pub unsafe fn convert(param: WPARAM, lpdata: LPARAM) -> Option<EventType> {
         Ok(WM_RBUTTONUP) => Some(EventType::ButtonRelease(Button::Right)),
         Ok(WM_XBUTTONDOWN) => {
             let code = get_button_code(lpdata) as u8;
+            let simulated = get_simulated(lpdata);
+
+            #[cfg(debug_assertions)]
+            println!("Simulated: {}", simulated);
+
             match code {
                 num if num == MOUSE_FORWARD => Some(EventType::ButtonPress(Button::Forward)),
                 num if num == MOUSE_BACKWARD => Some(EventType::ButtonPress(Button::Backward)),
