@@ -122,8 +122,8 @@ pub enum HookError {
 }
 
 pub unsafe fn set_key_hook(callback: RawCallback) -> Result<(), HookError> {
-    let hmod: HLOCAL = 0;
-    let hook = SetWindowsHookExA(WH_KEYBOARD_LL, Some(callback), hmod, 0);
+    let hmod: HLOCAL = std::ptr::null_mut();
+    let hook = SetWindowsHookExA(WH_KEYBOARD_LL, Some(callback), hmod as isize, 0);
 
     if hook == 0 {
         let error = GetLastError();
@@ -134,8 +134,8 @@ pub unsafe fn set_key_hook(callback: RawCallback) -> Result<(), HookError> {
 }
 
 pub unsafe fn set_mouse_hook(callback: RawCallback) -> Result<(), HookError> {
-    let hmod: HLOCAL = 0;
-    let hook = SetWindowsHookExA(WH_MOUSE_LL, Some(callback), hmod, 0);
+    let hmod: HLOCAL = std::ptr::null_mut();
+    let hook = SetWindowsHookExA(WH_MOUSE_LL, Some(callback), hmod as isize, 0);
     if hook == 0 {
         let error = GetLastError();
         return Err(HookError::Mouse(error));

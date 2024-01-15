@@ -17,6 +17,7 @@ license = "MIT"
 [dependencies]
 serde = {version = "1.0", features = ["derive"], optional=true}
 lazy_static = "1.4"
+tokio = "1.35"
 
 [features]
 serialize = ["serde"]
@@ -37,7 +38,7 @@ epoll = {version = "4.3", optional=true}
 inotify = {version = "0.10", default-features=false, optional=true}
 
 [target.'cfg(target_os = "windows")'.dependencies]
-windows-sys = { version = "0.48.0", features = [
+windows-sys = { version = "0.52.0", features = [
     "Win32_UI_WindowsAndMessaging",
     "Win32_Foundation",
     "Win32_System_Threading",
@@ -50,8 +51,8 @@ serde_json = "1.0"
 # Some tests interact with the real OS. We can't hit the OS in parallel
 # because that leads to unexpected behavior and flaky tests, so we need
 # to run thoses tests in sequence instead.
-serial_test = "2.0"
-tokio = {version = "1.5", features=["sync", "macros", "rt-multi-thread"]}
+serial_test = "3.0"
+tokio = {version = "1.35", features=["sync", "macros", "rt-multi-thread"]}
 
 [[example]]
 name = "serialize"

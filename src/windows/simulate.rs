@@ -3,21 +3,21 @@ use std::ffi::c_int;
 use std::mem::size_of;
 
 use windows_sys::Win32::UI::Input::KeyboardAndMouse::{
-    INPUT, INPUT_0, INPUT_KEYBOARD, INPUT_MOUSE, KEYBDINPUT, KEYEVENTF_KEYUP, MOUSEEVENTF_ABSOLUTE,
-    MOUSEEVENTF_HWHEEL, MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN,
-    MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_MOVE, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP,
-    MOUSEEVENTF_VIRTUALDESK, MOUSEEVENTF_WHEEL, MOUSEEVENTF_XDOWN, MOUSEEVENTF_XUP,
-    MOUSEINPUT, SendInput,
+    SendInput, INPUT, INPUT_0, INPUT_KEYBOARD, INPUT_MOUSE, KEYBDINPUT, KEYEVENTF_KEYUP,
+    MOUSEEVENTF_ABSOLUTE, MOUSEEVENTF_HWHEEL, MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP,
+    MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_MOVE, MOUSEEVENTF_RIGHTDOWN,
+    MOUSEEVENTF_RIGHTUP, MOUSEEVENTF_VIRTUALDESK, MOUSEEVENTF_WHEEL, MOUSEEVENTF_XDOWN,
+    MOUSEEVENTF_XUP, MOUSEINPUT,
 };
 use windows_sys::Win32::UI::WindowsAndMessaging::{
     GetSystemMetrics, SM_CXVIRTUALSCREEN, SM_CYVIRTUALSCREEN, WHEEL_DELTA,
 };
 
 use crate::rdev::{Button, EventType, SimulateError};
-use crate::windows::{DWORD, LONG, MOUSE_BACKWARD, MOUSE_FORWARD, WORD};
 use crate::windows::common::KEYBOARDMANAGER_INJECTED_FLAG;
 use crate::windows::keyboard::UINT;
 use crate::windows::keycodes::{code_from_key, scan_from_code};
+use crate::windows::{DWORD, LONG, MOUSE_BACKWARD, MOUSE_FORWARD, WORD};
 
 /// Not defined in win32 but define here for clarity
 static KEYEVENTF_KEYDOWN: u32 = 0;
@@ -28,7 +28,7 @@ fn sim_mouse_event(flags: DWORD, data: LONG, dx: LONG, dy: LONG) -> Result<(), S
     *inner_union = MOUSEINPUT {
         dx,
         dy,
-        mouseData: data,
+        mouseData: data.try_into().unwrap(),
         dwFlags: flags,
         time: 0,
         dwExtraInfo: KEYBOARDMANAGER_INJECTED_FLAG,
