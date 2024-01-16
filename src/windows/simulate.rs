@@ -15,7 +15,7 @@ use windows_sys::Win32::UI::WindowsAndMessaging::{
 
 use crate::rdev::{Button, EventType, SimulateError};
 use crate::windows::{DWORD, LONG, MOUSE_BACKWARD, MOUSE_FORWARD, WORD};
-use crate::windows::common::{analyse_simulate, KEYBOARDMANAGER_INJECTED_FLAG};
+use crate::windows::common::KEYBOARDMANAGER_INJECTED_FLAG;
 use crate::windows::keyboard::UINT;
 use crate::windows::keycodes::{code_from_key, scan_from_code};
 
@@ -83,6 +83,7 @@ fn sim_keyboard_event(flags: DWORD, vk: WORD, scan: WORD) -> Result<(), Simulate
 }
 
 pub fn simulate(event_type: &EventType) -> Result<(), SimulateError> {
+    // TODO: Maybe there is a use for a separate Simulated Key press? Explore
     match event_type {
         EventType::KeyPress(key) | EventType::SimulatedKeyPress(key) => {
             let code = code_from_key(*key).ok_or(SimulateError)?;
