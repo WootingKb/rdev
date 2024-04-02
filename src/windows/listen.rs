@@ -1,7 +1,7 @@
 use crate::rdev::{Event, EventType, ListenError};
 use crate::windows::common::{convert, set_key_hook, set_mouse_hook, HookError, HOOK, KEYBOARD};
 use std::os::raw::c_int;
-use std::ptr::null_mut;
+use std::ptr::{self, null_mut};
 use std::time::SystemTime;
 use windows_sys::Win32::Foundation::{LPARAM, LRESULT, WPARAM};
 use windows_sys::Win32::UI::WindowsAndMessaging::{CallNextHookEx, GetMessageA, HC_ACTION};
@@ -33,8 +33,11 @@ unsafe extern "system" fn raw_callback(code: c_int, param: WPARAM, lpdata: LPARA
                 time: SystemTime::now(),
                 name,
             };
-            if let Some(callback) = &mut GLOBAL_CALLBACK {
-                callback(event);
+
+            let callback = ptr::addr_of_mut!(GLOBAL_CALLBACK);
+
+            if (*callback).is_some() {
+                (*callback).as_mut().unwrap()(event)
             }
         }
     }
