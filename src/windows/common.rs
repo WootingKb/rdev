@@ -37,28 +37,6 @@ pub unsafe fn get_code(lpdata: LPARAM) -> DWORD {
     kb.vkCode
 }
 
-// #[cfg(debug_assertions)]
-// pub unsafe fn analyse_simulate(key_union: &mut KEYBDINPUT) {
-//     println!("SIMULATION ANALYSIS");
-//     println!("Event vkCode: {}", key_union.wVk);
-//     println!("Event scanCode: {}", key_union.wScan);
-//     println!("Event flags: {}", key_union.dwFlags);
-//     println!("Event time: {}", key_union.time);
-//     println!("Event simulated?: {}", key_union.dwExtraInfo);
-//     println!("--------");
-// }
-// #[cfg(debug_assertions)]
-// pub unsafe fn analyse_listen(lpdata: LPARAM) {
-//     let kb = *(lpdata as *const KBDLLHOOKSTRUCT);
-//     println!("LISTEN ANALYSIS");
-//     println!("Event vkCode: {}", kb.vkCode);
-//     println!("Event scanCode: {}", kb.scanCode);
-//     println!("Event flags: {}", kb.flags);
-//     println!("Event time: {}", kb.time);
-//     println!("Event simulated?: {}", kb.dwExtraInfo);
-//     println!("--------");
-// }
-
 /// Returns whether the input received was made by the rdev simulate command, or the user pressing keys.
 pub unsafe fn get_simulated(lpdata: LPARAM) -> bool {
     let kb = *(lpdata as *const KBDLLHOOKSTRUCT);
