@@ -90,6 +90,21 @@ const KEY_M: CGKeyCode = 46;
 const COMMA: CGKeyCode = 43;
 const DOT: CGKeyCode = 47;
 const SLASH: CGKeyCode = 44;
+const KP_RETURN: CGKeyCode = 76;
+const KP_MINUS: CGKeyCode = 78;
+const KP_PLUS: CGKeyCode = 69;
+const KP_MULTIPLY: CGKeyCode = 67;
+const KP_DIVIDE: CGKeyCode = 75;
+const KP0: CGKeyCode = 82;
+const KP1: CGKeyCode = 83;
+const KP2: CGKeyCode = 84;
+const KP3: CGKeyCode = 85;
+const KP4: CGKeyCode = 86;
+const KP5: CGKeyCode = 87;
+const KP6: CGKeyCode = 88;
+const KP7: CGKeyCode = 89;
+const KP8: CGKeyCode = 91;
+const KP9: CGKeyCode = 92;
 
 pub fn code_from_key(key: Key) -> Option<CGKeyCode> {
     match key {
@@ -178,6 +193,21 @@ pub fn code_from_key(key: Key) -> Option<CGKeyCode> {
         Key::Comma => Some(COMMA),
         Key::Dot => Some(DOT),
         Key::Slash => Some(SLASH),
+        Key::Kp1 => Some(KP1),
+        Key::Kp2 => Some(KP2),
+        Key::Kp3 => Some(KP3),
+        Key::Kp4 => Some(KP4),
+        Key::Kp5 => Some(KP5),
+        Key::Kp6 => Some(KP6),
+        Key::Kp7 => Some(KP7),
+        Key::Kp8 => Some(KP8),
+        Key::Kp9 => Some(KP9),
+        Key::Kp0 => Some(KP0),
+        Key::KpReturn => Some(KP_RETURN),
+        Key::KpMinus => Some(KP_MINUS),
+        Key::KpPlus => Some(KP_PLUS),
+        Key::KpMultiply => Some(KP_MULTIPLY),
+        Key::KpDivide => Some(KP_DIVIDE),
         Key::Function => Some(FUNCTION),
         Key::Unknown(code) => code.try_into().ok(),
         _ => None,
@@ -270,6 +300,21 @@ pub fn key_from_code(code: CGKeyCode) -> Key {
         COMMA => Key::Comma,
         DOT => Key::Dot,
         SLASH => Key::Slash,
+        KP1 => Key::Kp1,
+        KP2 => Key::Kp2,
+        KP3 => Key::Kp3,
+        KP4 => Key::Kp4,
+        KP5 => Key::Kp5,
+        KP6 => Key::Kp6,
+        KP7 => Key::Kp7,
+        KP8 => Key::Kp8,
+        KP9 => Key::Kp9,
+        KP0 => Key::Kp0,
+        KP_RETURN => Key::KpReturn,
+        KP_MINUS => Key::KpMinus,
+        KP_PLUS => Key::KpPlus,
+        KP_MULTIPLY => Key::KpMultiply,
+        KP_DIVIDE => Key::KpDivide,
         FUNCTION => Key::Function,
         code => Key::Unknown(code.into()),
     }
